@@ -72,7 +72,7 @@ function mountShard(content: string) {
 	return { runtime, shard, fetchAndReplace: refetch(shard) };
 }
 
-it("a shard sends the identity in a header and the arguments and signal values in the body", async () => {
+it("a shard without arguments sends unit and its signal values", async () => {
 	const stub = stubFetch(500, "Internal Server Error");
 	const { fetchAndReplace, runtime, shard } = mountShard("");
 	runtime.registry.insert("s1", new F64(3));
@@ -84,7 +84,7 @@ it("a shard sends the identity in a header and the arguments and signal values i
 	const headers = stub.request()?.headers as Record<string, string>;
 	expect(headers["X-Topcoat-Identity"]).toBe("0");
 	expect(JSON.parse(stub.request()?.body as string)).toEqual({
-		args: [],
+		args: null,
 		signals: { s1: 3 },
 	});
 });

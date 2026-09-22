@@ -54,7 +54,10 @@ export class ShardUnit extends RenderUnit {
 		// The signals the current content created travel with the request,
 		// so the server resumes them instead of starting them over.
 		const { args, signals } = untrack(() => ({
-			args: this.computes.map((compute) => dehydrate(compute(context))),
+			args:
+				this.computes.length === 0
+					? null
+					: this.computes.map((compute) => dehydrate(compute(context))),
 			signals: this.contentScope.collectSignalValues(),
 		}));
 		return fetch(`${SHARD_ROUTE_PREFIX}/${this.shard}`, {
